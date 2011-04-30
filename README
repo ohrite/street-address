@@ -1,3 +1,10 @@
 street-address
 
 Scans a document with a regular expression to detect street addresses (partial and otherwise).
+
+Like so: 100 Pine Street
+
+Or so: 100 Pine Street San Francisco, CA 94104
+
+Or so: 100 Pine St.
+San Francisco, CA 94104
