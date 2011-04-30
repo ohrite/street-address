@@ -11,7 +11,7 @@ class StreetAddress:
   def __init__(self):
     self.streets = '(Dr(ive)?|St(reet)?|L(ane|n)|R(oad|d)|Av(enue|e)|B(oulevard|lvd))'
     self.with_street = '\d+\s(\w+\s)+?' + self.streets + '(\s#\w+\s)?'
-    self.without_street = '\d+\s(\w+\s)+?[A-Z]{2}\s\d{5}(-\S*)?'
+    self.without_street = '\d+\s([#\w]+\s)+?[A-Z]{2}\s\d{5}(-\S*)?'
     self.matcher = self.without_street + '|' + self.with_street
     
     print(self.matcher)
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     
     def testPenske(self):
       results = self.address.match('samples/penske.txt')
-      self.assertEqual(results, ['1219 W Byron St 1R Chicago IL 60613',
+      self.assertEqual(results, ['1219 W Byron St #1R Chicago IL 60613',
                                  '1033 East 41st Street Chicago IL 60613'])
       
     def testReceipt(self):
@@ -75,7 +75,7 @@ if __name__ == '__main__':
       
     def testSignature(self):
       results = self.address.match('samples/signature.txt')
-      self.assertEqual(results, ['1219 W Byron St Rear 1 1R Chicago IL 60613'])
+      self.assertEqual(results, ['1219 W Byron St Rear 1 #1R Chicago IL 60613'])
     
     def testSignature2(self):
       results = self.address.match('samples/signature2.txt')
