@@ -9,15 +9,12 @@ class StreetAddress:
     Matches addresses.
   """
   def __init__(self):
-    self.number = '\d+\s'
     self.streets = '(Dr(ive)?|St(reet)?|L(ane|n)|R(oad|d)|Av(enue|e)|B(oulevard|lvd))'
-    self.suite = '(\s#\w+?)?'
-    self.with_street = self.number + '(\w+?\s)+?' + self.streets + self.suite
-    self.without_street = self.number + '(\w+?\s)+?' + self.streets + '?' + self.suite
-    self.city_zip = '(\s\w+?\s[A-Z]{2}\s[0-9]{5})'
+    self.with_street = '\d+\s(\w+\s)+?' + self.streets + '(\s#\w+\s)?'
+    self.without_street = '\d+\s(\w+\s)+?[A-Z]{2}\s\d{5}\S*'
+    self.matcher = '(' + self.without_street + '|' + self.with_street + ')'
     
-    print(self.with_street)
-    print(self.without_street + self.city_zip)
+    print(self.matcher)
     
   def match(self, file):
     """
@@ -33,13 +30,9 @@ class StreetAddress:
       f = open(file, 'r')
       content = re.sub('\s+', ' ', re.sub(',|\.', '', f.read()))
 
-
-      for m in re.finditer(self.with_street, content):
+      for m in re.finditer(self.matcher, content):
         result.append(m.group(0))
 
-      for m in re.finditer(self.without_street + self.city_zip, content):
-        result.append(m.group(0))
-    
     return result
     
 if __name__ == '__main__':
@@ -51,7 +44,6 @@ if __name__ == '__main__':
 
     def testBadFormat(self):
       results = self.address.match('samples/bad-formatting.txt')
-      self.assertEqual(len(results), 3)
       self.assertEqual(results, ['9909 Dosah Dr TX 78753',
                                  '9909 Dorset Austin TX 78753',
                                  '3600 Greystone Dr #533 Austin TX 78731'])
@@ -75,13 +67,11 @@ if __name__ == '__main__':
       
     def testReceipt(self):
       results = self.address.match('samples/receipt.txt')
-      self.assertEqual(results, ['9009 Dorset Dr',
-                                 '9009 Dorset Dr Austin TX 78753-4413'])
+      self.assertEqual(results, ['9009 Dorset Dr Austin TX 78753-4413'])
     
     def testShortForm(self):
       results = self.address.match('samples/short-form.txt')
-      self.assertEqual(results, ['9009 Dorset Dr',
-                                 '9009 Dorset Dr Austin TX 78753'])
+      self.assertEqual(results, ['9009 Dorset Dr Austin TX 78753'])
       
     def testSignature(self):
       results = self.address.match('samples/signature.txt')
