@@ -1,0 +1,3 @@
+street-address
+
+Scans a document with a regular expression to detect street addresses (partial and otherwise).
