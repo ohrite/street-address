@@ -12,7 +12,7 @@ class StreetAddress:
     self.streets = '(Dr(ive)?|St(reet)?|L(ane|n)|R(oad|d)|Av(enue|e)|B(oulevard|lvd))'
     self.with_street = '\d+\s(\w+\s)+?' + self.streets + '(\s#\w+\s)?'
     self.without_street = '\d+\s(\w+\s)+?[A-Z]{2}\s\d{5}\S*'
-    self.matcher = '(' + self.without_street + '|' + self.with_street + ')'
+    self.matcher = self.without_street + '|' + self.with_street
     
     print(self.matcher)
     
